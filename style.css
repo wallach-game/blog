@@ -27,6 +27,10 @@ article > p {
 
 article {
     background-color: #2ebceb3a;
+    height: min-content;
+    width: 70ch; /* Set the width to 70 characters' worth of space */
+    max-width: 90vw;
+    font-size: 1.25em; 
 }
 
 
