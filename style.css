@@ -49,7 +49,7 @@ p {
 }
 
 .desktopWindow::before {
-    content: "\00A0\00A0🔴🟡🟢";
+    content: "\00A0\00A0🔴\00A0🟡\00A0🟢";
     background-color: #28a3cca8;
     left: 2px;
     width: 100%;
