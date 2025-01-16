@@ -48,8 +48,12 @@ article {
     margin: 1em;
 }
 
-.ad {
+.ad-desktop {
     width: 20vw; height: min-content; color: #D0CCD0;
+}
+
+.ad-mobile{
+    display: none;
 }
 
 p {
@@ -95,10 +99,12 @@ span {
         flex-direction: column;
     }
 
-    
+    .ad-desktop{
+        display: none;
+    }
 
-    .ad {
-        
+    .ad-mobile {
+        display: initial;
         position: fixed;
         bottom: 0;
         right:0;
@@ -110,7 +116,7 @@ span {
         z-index: 1;
     }
 
-    .ad::before {
+    .ad-mobile::before {
         content: "";
         background-color: transparent;
     }
