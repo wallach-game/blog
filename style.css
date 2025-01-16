@@ -48,6 +48,10 @@ article {
     margin: 1em;
 }
 
+.ad {
+    width: 20vw; height: min-content; color: #D0CCD0;
+}
+
 p {
     color: #D0CCD0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
