@@ -102,6 +102,17 @@ span {
 
 @media (orientation: portrait) {
 
+    .desktopWindow>span {
+        width: 50%;
+        padding-right: 0em;
+        top: -3.2em;
+        left: 35px;
+    }
+
+    .details.desktopWindow::before {
+        height: 3em;
+    }
+
 
     .wrapperMain {
         flex-direction: column;
@@ -139,13 +150,12 @@ span {
 @media (430px > width) {
     .details.desktopWindow::before {
         height: 3em;
-        border-radius: 1em;
     }
 
     .desktopWindow>span {
-        width: 50%;
+        width: 40%;
         padding-right: 0em;
         top: -3.2em;
-        left: 25px;
+        left: 0px;
     }
 }
