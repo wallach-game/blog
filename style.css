@@ -147,6 +147,16 @@ span {
 
 }
 
+@media (550px > width) {
+    .details.desktopWindow::before {
+        height: 3em;
+    }
+
+
+    }
+
+}
+
 @media (430px > width) {
     .details.desktopWindow::before {
         height: 3em;
@@ -154,8 +164,8 @@ span {
 
     .desktopWindow>span {
         width: 40%;
-        padding-right: 0em;
-        top: -3.2em;
+        position: relative;
         left: 0px;
+        top: -1.5em
     }
 }
