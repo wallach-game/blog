@@ -75,101 +75,7 @@
         </div>
 
         <div class="articles">
-            <article class="desktopWindow details" data-before="test">
-                <span>Numerator 1/16/2025</span>
-                <h3>
-                    Containers in azure and internal networking.
-                </h3>
-                <p><small><small>
-                            TLDR: just have everything in containers, or use darp or any other message broker, as per
-                            writing, vm to container internal networking maybe? works. I should get better over time, and in past it was propably working
-                        </small></small>
-                    <br>
-                    <br>
-                    <small><Small>Acronyms used:<br>
-                            ACA ➡️ Azure Container App<br>
-                            ACI ➡️ Azure Container Instances
-                        </Small></small>
-                </p>
-
-
-                <p>
-                    <Big><Big><Big>W</Big></Big></Big>hen I got tasked with dockerizing a service, I thought, "Easy.
-                    Done it before." A couple of weeks later, I had a functional, tested container, after porting a
-                    dusty .NET 4.3 app. No explosions. Great start.
-                </p>
-                <p>
-                    The team got together to test the container talking to the VM over the internet. It wasn’t smooth,
-                    but after some light <em>“encouragement”</em> (aka debugging), they started communicating. We jotted
-                    down a to-do list, grabbed some coffee, sent something vaguely optimistic to the CTO, and went home
-                </p>
-                <p>
-                    Then reality hit: <strong>How do I make the VM talk to the container over an internal
-                        network?</strong>
-                </p>
-
-                <h2>Private Networking: Where Hope Goes to Die</h2>
-                <p>
-                    The service was deployed as Azure Container Apps (ACA). Switching the ACA environment to private
-                    networking slapped me with the ominous label <strong>(Preview).</strong>
-                    What could go wrong? Turns out, everything.
-                </p>
-                <p>
-                    Enabling private networking auto-created a new resource group that I wasn’t part of. Quick message to the sysadmin and I can continue.
-
-                </p>
-                <p>
-                    After some tweaks, I got a faint glimmer of life with <code>tcpping</code> on the service port.
-                    Curl? Dead. Tried changing ports. Now even <code>tcpping</code> gave up on me. Switched them back.
-                    Still nothing.
-                </p>
-                <p>
-                    At this point, I was asking existential questions.
-                </p>
-
-                <h2>Googling for Sanity</h2>
-                <p>
-                    YouTube to the rescue? Nope. The first tutorial I found was two years old.
-                    Eventually, I stumbled upon an official Microsoft guide, that is 1 month old. Hallelujah! Except the guide was
-                    incomplete, so I had to cross-reference the CLI version to make it "work"
-                </p>
-                <p>
-                    I finally got the container’s internal URL automaticaly registered in a private DNS zone. Success? Nope. The
-                    service still didn’t work. Oh, and the container started crashing because following Microsoft’s
-                    <em>official</em> steps broke its communication with Key Vault. Key Vault! The thing the entire
-                    service depends on. Lovely.
-                </p>
-
-                <h2>Static IPs and Moving Targets</h2>
-                <p>
-                    Desperate, I tried Azure Container Instances (ACI). They have very little feature set, no automatic updates, http-scaling ect. These get an IP from the subnet. Sounds perfect, right?
-                    Wrong. Static IPs? Forget it. The IP changes every time the container restarts. Because, of course,
-                    nothing screams “enterprise-ready” like random IP roulette.
-                </p>
-                <p>
-                    Here’s the best part: you need the container’s local URL <em>before</em> the service launches. And
-                    the only way to get it? Launch the container, then query it using the Azure CLI. Sure, that makes
-                    sense.
-                </p>
-                <p>
-                    So, I wrote a quick bash script with <code>jq</code> to scrape the IP and auto-update my config. Was
-                    Is it clever? Yes. Did it feel like duct-taping my solution together? Also yes.
-                </p>
-
-                <h2>Final Thoughts</h2>
-                <p>
-                    As I sit here, beer in hand, reflecting on the past few days, here’s my verdict:
-                </p>
-                <p>
-                    Yes, it’s technically possible to make this work. But honestly? It’s not worth it. Save your time,
-                    your sanity, and your liver. Either go full-on containers or use Dapr. Anything else is
-                    asking for trouble.
-                </p>
-                <p>
-                    Cheers to surviving the cloud! 🍻
-                </p>
-            </article>
-
+            
         </div>
     </div>
 
@@ -178,5 +84,7 @@
 
 
 </body>
+
+<script src="main.js"></script>
 
 </html>

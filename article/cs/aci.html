@@ -1,0 +1,88 @@
+<span>Numerátor 16. 1. 2025</span>
+<h3>
+    Kontejnery v Azure a interní síťová komunikace.
+</h3>
+<p><small><small>
+            TLDR: mějte vše v kontejnerech, nebo použijte Dapr nebo jiný message broker. Interní
+            komunikace z VM do kontejneru? Možná funguje. S časem se zlepší a dříve to podle všeho
+            fungovalo.
+        </small></small>
+    <br>
+    <br>
+    <small><small>Zkratky použité:<br>
+            ACA ➡️ Azure Container App<br>
+            ACI ➡️ Azure Container Instances
+        </small></small>
+</p>
+
+<p>
+    <big><big><big>K</big></big></big>dyž mi zadali dockerizovat službu, řekl jsem si: „Snadné. Už jsem
+    to dělal.“ O pár týdnů později jsem měl funkční a otestovaný kontejner po portaci staré aplikace
+    .NET 4.3. Žádné exploze. Skvělý začátek.
+</p>
+<p>
+    Tým se sešel, aby otestoval komunikaci kontejneru s VM přes internet. Nebylo to hladké, ale po
+    lehkém <em>„popostrčení“</em> (tj. debugování) začali komunikovat. Zapsali jsme si seznam úkolů,
+    dali si kávu, poslali něco vlažně optimistického CTO a šli domů.
+</p>
+<p>
+    Pak přišla realita: <strong>Jak přimět VM, aby komunikovalo s kontejnerem přes interní síť?</strong>
+</p>
+
+<h2>Privátní komunikace: Peklo na zemi</h2>
+<p>
+    Služba byla nasazena jako Azure Container Apps (ACA). Přepnutí prostředí ACA na privátní síťování mi
+    mi zobrazilo label <strong>(Preview).</strong> Co by se mohlo pokazit? Ukázalo se, že všechno.
+</p>
+<p>
+    Povolení privátního síťování automaticky vytvořilo novou skupinu zdrojů, ke které jsem neměl
+    přístup. Rychlá zpráva správci systému a mohl jsem pokračovat.
+</p>
+<p>
+    Po pár úpravách jsem viděl slabou jiskru života s <code>tcpping</code> na portu služby. Curl? Mrtvý.
+    Změnil jsem porty. Teď už ani <code>tcpping</code> nefungoval. Vrátil jsem je zpět. Už ani <code>tcpping</code>
+    nefunguje.
+</p>
+<p>
+    V tu chvíli jsem si kladl existenciální otázky.
+</p>
+
+<h2>Googlení pro zachování rozumu</h2>
+<p>
+    YouTube na záchranu? Ne. Jedinný tutoriál, který jsem našel, byl dva roky starý. Nakonec jsem narazil
+    na oficiální Microsoft návod, který byl měsíc starý. Haleluja! Až na to, že byl neúplný, takže jsem
+    musel crossreferencovat CLI verzi, aby to začlo „fungovalo“.
+</p>
+<p>
+    Nakonec se automaticky zaregistrovala interní URL kontejneru v privátní DNS zóně. Úspěch? Ne. Služba stále
+    nefungovala. A kontejner začal padat, protože postupování podle <em>oficiálních</em> kroků
+    Microsoftu rozbilo komunikaci s Key Vaultem. Key Vault! Základ celé služby. Skvělé.
+</p>
+
+<h2>"Statické" IP adresy a ACI</h2>
+<p>
+    Zoufalý, vyzkoušel jsem Azure Container Instances (ACI). Ty mají velmi málo funkcí, žádné
+    automatické aktualizace, škálování dle požadavků atd. Tyto dostávají IP ze subnetu. Perfektní, ne?
+    NE. Statické IP? Zapomeňte. IP se mění při každém restartu kontejneru.
+</p>
+<p>
+    Nejlepší část? Potřebuji lokální URL/IP kontejneru <em>před</em> spuštěním služby. A jediný způsob,
+    jak ho získat? Spustit kontejner a poté se zeptat Azure CLI na jeho IP. Skvělé.
+</p>
+<p>
+    Tak jsem napsal rychlý bash skript s <code>jq</code>, který sebere IP a automaticky aktualizuje
+    konfigurační soubor. Bylo to chytré? Ano. Připadal jsem si, jako bych svůj projekt obalil lepicí páskou?
+    Taky ano.
+</p>
+
+<h2>Závěrečné myšlenky</h2>
+<p>
+    Jak tu sedím s pivem v ruce a přemýšlím o posledních dnech, zde je můj verdikt:
+</p>
+<p>
+    Ano, technicky je možné to zprovoznit. Ale upřímně? Nestojí to za to. Ušetřete si čas, rozum a
+    játra. Buď přejděte kompletně na kontejnery, nebo použijte Dapr. Cokoliv jiného dopadne takto.
+</p>
+<p>
+    Na zdraví pro přežití cloudu! 🍻
+</p>
